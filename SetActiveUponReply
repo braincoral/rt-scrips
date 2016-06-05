@@ -1,0 +1,28 @@
+#Description: Set ticket to active upon customer reply
+#Condition: On Correspond
+#Action: User Defined
+#Template: Blank
+
+#Custom Condition: N/A
+
+#Custom action preparation code:	
+
+return 1;
+
+#Custom action commit code:
+
+# Pull transaction actor and ticket owner ID's and set variables
+my $Actor = $self->TransactionObj->Creator;
+my $Owner = $self->TicketObj->Owner;
+
+# Get out if actor is ticket owner
+if( $Owner != $Actor ) {
+# Change status to "open" if status is "customer"
+if ($self->TicketObj->Status() eq 'customer' ) {
+$self->TicketObj->SetStatus('open');
+$RT::Logger->info("Customer replied to ticket awaiting reply. Status set to open.");
+return 1;
+}
+return undef;
+}
+return undef;
