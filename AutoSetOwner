@@ -1,0 +1,27 @@
+#Description: Auto Set Owner
+#Condition: On Create
+#Action: User Defined
+#Template: Blank
+
+#Custom Condition: N/A
+
+#Custom action preparation code:	
+
+return 1;
+
+#Custom action commit code:
+
+# Set Actor [redacted]'s User ID
+my $Actor = 22;
+
+# get out unless ticket owner is nobody
+return 1 unless $self->TicketObj->Owner == $RT::Nobody->id;
+
+# ok, try to change owner
+$RT::Logger->info("Auto assign ticket #". $self->TicketObj->id ." to user #". $Actor );
+my ($status, $msg) = $self->TicketObj->SetOwner( $Actor );
+unless( $status ) {
+$RT::Logger->error( "Impossible to assign the ticket to $Actor: $msg" );
+return undef;
+}
+return 1;
