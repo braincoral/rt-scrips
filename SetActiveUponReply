@@ -20,7 +20,7 @@ if( $Owner != $Actor ) {
 # Change status to "open" if status is "customer"
 if ($self->TicketObj->Status() eq 'customer' ) {
 $self->TicketObj->SetStatus('open');
-$RT::Logger->info("Customer replied to ticket awaiting reply. Status set to open.");
+$RT::Logger->info("$Actor replied to ticket awaiting reply. Status set to open.");
 return 1;
 }
 return undef;
